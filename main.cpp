@@ -1,28 +1,51 @@
 #include <iostream>
-#include <thread>
+#include <string>
+#include <cstdlib>
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
+
+using std::string;
 
 void print(const boost::system::error_code&)
 {
-    std::cout << "No one was ever that patient, lmao!" << std::endl;
+    std::cout << "Print test is done !\n";
+    std::cout << "Fvckity bye !\n" << std::endl;
 }
 
-void Simon(std::string line)
+int synctest()
 {
-    std::cout << "Simon says: " << line << std::endl;
+    boost::asio::io_context io;
+    boost::asio::steady_timer t(io, boost::asio::chrono::seconds(3));
+    t.wait();
+    std::cout << "Hello ! So where was I ? BARCELONA !\n" << std::endl;
+    return 0;
 }
 
-int main()
+int asynctest()
 {
-    std::cout << "Hello world!\n";
+    //Commented for fun
     boost::asio::io_context io;
     boost::asio::steady_timer t(io, boost::asio::chrono::seconds(5));
     t.async_wait(&print);
-    std::cout << "Really ?\n";
-    std::cout << "Lol" << std::endl;
-    io.run();
-    std::thread t1(Simon, "Hello !");
-    t1.join();
+    //This part runs first
+    std::cout<<"Press Enter to continue !";
+    std::cin.get();
+    std::cout<<"Kono Dio da !" << std::endl;
+    //run async_wait
+    io.run();  //If the timer expires, the print function will run
+    //The next one will just run normally
+    std::cout<< "End of the line, my friend !\n" << std::endl;
+    return 0;
+}
+
+int bindtest()
+{
+    
+    return 0;
+}
+
+int main(int argc, char** argv) {
+
+    synctest();
+    asynctest();
     return 0;
 }
